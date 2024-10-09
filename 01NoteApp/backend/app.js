@@ -1,15 +1,19 @@
+// app.js
+const express = require('express');
+const cors = require('cors');
+const noteRoutes = require('./routes/noteRoutes');
+const connectDB = require('./config/db');
 
+const app = express();
 
-const express=require('express');
-const cors=require('cors');
-const noteRoutes=require('./routes/noteRoutes');
-const connectDB=require('./config/db');
+// Connect to the database
+connectDB();
 
-
-
-const app =express();
+// Middleware
 app.use(cors());
 app.use(express.json());
 
+// Routes
+app.use('/api/notes', noteRoutes);
 
-module.exports=app;
+module.exports = app;

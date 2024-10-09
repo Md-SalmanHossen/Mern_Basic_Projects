@@ -1,58 +1,99 @@
+const express = require('express');
+const Note = require('../models/Note');
+const router = express.Router();
 
-const express=require('express');
-const Note=require('../models/noteSchema');
-const router=express.Router();
-
-
-//  read a file
-router.get('/', async(req,res)=>{
-    try{
-        const notes=await Note.find();
-        res.status(200).json(notes)
-    }catch(error){
-        res.status(500).json({message:'server error'})
-    }
-})
-
-
-//  create a new file
-router.post('/', async(req,res)=>{
-    try{
-        const newNote= new Note({
-            tittle:req.body.title,
-            description:req.body.description,
+// Create a new note
+router.post('/', async (req, res) => {
+    try {
+        const newNote = new Note({
+            title: req.body.title,
+            description: req.body.description,
         });
         await newNote.save();
-        res.status(201).json(newNote)
-    }catch(error){
-        res.status(500).json({message:'server error'})
+        res.status(201).json(newNote);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
     }
 });
 
+// Get all notes
+router.get('/', async (req, res) => {
+    try {
+        const notes = await Note.find();
+        res.status(200).json(notes);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 
-//  update a file
-router.put('/:id', async(req,res)=>{
-    try{
-        const updateNotes=await Note.findByIdAndUpdate(
+// Update a note
+router.put('/:id', async (req, res) => {
+    try {
+        const updatedNote = await Note.findByIdAndUpdate(
             req.params.id,
             req.body,
-            {new:true}
+            { new: true }
         );
-        res.status(200).json(updateNotes)
-    }catch(error){
-        res.status(500).json({message:'server error'})
+        res.status(200).json(updatedNote);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
     }
 });
 
-
-//  delete a file
-router.delete('/:id', async(req,res)=>{
-    try{
+// Delete a note
+router.delete('/:id', async (req, res) => {
+    try {
         await Note.findByIdAndDelete(req.params.id);
-        res.status(2000).json({message:'Note Deleted'})
-    }catch(error){
-        res.status(500).json({message:'server error'})
+        res.status(200).json({ message: 'Note deleted' });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
     }
 });
 
-module.exports=router;
+module.exports = router;
+        const newNote = new Note({
+            title: req.body.title,
+            description: req.body.description,
+        });
+        await newNote.save();
+        res.status(201).json(newNote);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get all notes
+router.get('/', async (req, res) => {
+    try {
+        const notes = await Note.find();
+        res.status(200).json(notes);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update a note
+router.put('/:id', async (req, res) => {
+    try {
+        const updatedNote = await Note.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        res.status(200).json(updatedNote);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Delete a note
+router.delete('/:id', async (req, res) => {
+    try {
+        await Note.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Note deleted' });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+module.exports = router;
